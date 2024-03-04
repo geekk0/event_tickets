@@ -1,0 +1,51 @@
+{%  extends 'base.html' %}
+{% block style %}
+    .errorlist {
+        color: red; 
+        font-weight: bold; 
+        list-style: none; 
+        padding: 0; 
+        margin: 3%;
+    }
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-8 offset-2" style="margin:auto;text-align: center">
+        <h1>Add Ticket</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ ticket_form.as_p }}
+            {{ voucher_formset.management_form }}
+            <div id="voucher-forms">
+                {% for form in voucher_formset %}
+                    <div class="voucher-form" style="margin-top: 10px;">
+                        {{ form.as_p }}
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline-dark" id="add-voucher" style="margin: 2%;margin-top: 20px">Add Voucher</button>
+            <button type="submit" class="btn btn-outline-dark" style="margin: 2%;margin-top: 20px">Create Ticket</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var addVoucherButton = document.getElementById('add-voucher');
+            var voucherFormsContainer = document.getElementById('voucher-forms');
+            var totalForms = document.getElementById('id_form-TOTAL_FORMS');
+
+            var formCount = parseInt('{{ voucher_formset.total_forms }}');
+
+            addVoucherButton.addEventListener('click', function() {
+                var newFormHtml = '{{ voucher_formset.empty_form|escapejs }}'.replace(/__prefix__/g, formCount);
+                var newFormContainer = document.createElement('div');
+                newFormContainer.classList.add('voucher-form');
+                newFormContainer.style.marginTop = '10px'; // Adjust margin-top as needed
+                newFormContainer.innerHTML = newFormHtml;
+                voucherFormsContainer.appendChild(newFormContainer);
+                formCount++;
+                totalForms.setAttribute('value', formCount);
+            });
+        });
+    </script>
+{% endblock %}

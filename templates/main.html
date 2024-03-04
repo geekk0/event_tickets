@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row" >
+            <div class="col-10 offset-1" style="margin:auto;text-align: center">
+                <h3>Welcome to perfectly blank main page!</h3>
+            </div>
+        </div> 
+        {% if not user.is_authenticated %}
+            <div class="col-10 offset-1" style="margin:auto;margin-top: 3%;text-align: center">
+                <a href="{% url 'login' %}" class="btn btn-outline-dark">Sign in</a>
+            </div>
+        {% endif %}
+           
+    </div>
+    {% if user.is_authenticated %}
+        <h4 style="width: 70%;margin: auto; text-align: center;margin-top:5%">Welcome, partner!</h4>
+        <h5 style="width: 70%;margin: auto; text-align: center;margin-top:2%">Scan the qr-code, please, 
+            to manage the ticket's vouchers</h5>
+        
+    {% endif %}
+        
+{% endblock %}
