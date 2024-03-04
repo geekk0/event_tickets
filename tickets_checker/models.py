@@ -40,7 +40,7 @@ class Voucher(models.Model):
     ]
 
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='ticket_vouchers')
-    partner = models.ForeignKey(Partner, on_delete=models.CASCADE, verbose_name="partner_org")
+    partner = models.ForeignKey(Partner, on_delete=models.CASCADE, verbose_name="Partner")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
 
     def __str__(self):
