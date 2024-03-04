@@ -81,7 +81,7 @@ class AddTicketForm(forms.ModelForm):
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
-        fields = ['code']
+        fields = ['code', 'holder']
 
 class VoucherForm(forms.ModelForm):
     class Meta:

@@ -5,7 +5,9 @@
         <h3 style="color: #e02929; text-align: center; margin-top:2%">{{ error }}</h3>
     {% else %}
         <div style="width: 70%; margin: auto; margin-top: 3%; text-align: center">
-            <h3>Ticket № {{ ticket_info }}</h3>
+            <h3><span style="font-size: 14pt">Ticket holder: </span>{{ ticket_info.holder }}</h3>
+            <br>
+            <h5>Ticket № {{ ticket_info }}</h5>
         </div>
         <div style="width: 70%; margin: auto; margin-top: 5%;  text-align: center">
             {% if vouchers %}
@@ -16,19 +18,24 @@
                     {% for voucher in vouchers %}
                         {% if user.is_authenticated %}
                             <li>
-                                {% if voucher.partner.image %}
-                                    <img src="{{ voucher.partner.image.url }}" alt="{{ voucher.partner.name }} Image">
-                                {% else %}
-                                    <p></p>
-                                {% endif %}  
-                                
-                                &nbsp; {{ voucher.partner }} &nbsp;
-                                
-                                <select style="margin: 1% 0;" name="voucher_status_{{ voucher.id }}">
-                                    <option value="active" {% if voucher.status == 'active' %}selected{% endif %}>Active</option>
-                                    <option value="used" {% if voucher.status == 'used' %}selected{% endif %}>Used</option>
-                                    <!--<option value="expired" {% if voucher.status == 'expired' %}selected{% endif %}>Expired</option>-->
-                                </select>
+                                <div class="row col-8 offset-2" style="display: block ruby; margin-top:2%">
+                                    <div class="col-4">
+                                        {% if voucher.partner.image %}
+                                                <img src="{{ voucher.partner.image.url }}" alt="{{ voucher.partner.name }} Image">
+                                        {% else %}
+                                                <p></p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="col-4">&nbsp; {{ voucher.partner }} &nbsp;</div>
+                                    
+                                    <div class="col-4">
+                                        <select class="form-select" style="margin: 1% 0;" name="voucher_status_{{ voucher.id }}">
+                                            <option value="active" {% if voucher.status == 'active' %}selected{% endif %}>Active</option>
+                                            <option value="used" {% if voucher.status == 'used' %}selected{% endif %}>Used</option>
+                                            <!--<option value="expired" {% if voucher.status == 'expired' %}selected{% endif %}>Expired</option>-->
+                                        </select>
+                                </div>
                             </li>
                         
                         {% else %}
@@ -57,7 +64,7 @@
                     {% endfor %}
                   </ul>
                   {% if user.is_authenticated %}  
-                    <button type="submit">Update Vouchers</button>
+                    <button type="submit" class="btn btn-outline-dark" style="margin-top: 2%">Update Vouchers</button>
                   {% endif %}
                 </form>
             {% else %}

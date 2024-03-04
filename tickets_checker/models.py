@@ -18,6 +18,7 @@ class Partner(models.Model):
 class Ticket(models.Model):
     code = models.CharField(max_length=100, verbose_name='Ticket unique number', unique=True)
     vouchers = models.ForeignKey(Partner, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Vouchers')
+    holder = models.CharField(max_length=250, verbose_name='Ticket holder name', blank=True, null=True)
 
     def __str__(self):
         return self.code

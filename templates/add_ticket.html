@@ -10,21 +10,30 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-8 offset-2" style="margin:auto;text-align: center">
-        <h1>Add Ticket</h1>
+    <div class="col-md-4 offset-4" style="margin:auto;text-align: right">
+        <h1 style="text-align: center">Add Ticket</h1>
         <form method="post">
             {% csrf_token %}
             {{ ticket_form.as_p }}
             {{ voucher_formset.management_form }}
-            <div id="voucher-forms">
+            <div style="text-align: center" id="voucher-forms">
                 {% for form in voucher_formset %}
-                    <div class="voucher-form" style="margin-top: 10px;">
-                        {{ form.as_p }}
+                    <div style="margin-top: 10px;">
+                        {{ form.voucher_uid.errors }}
+                        <select class="form-select" name="{{ form.voucher_uid.name }}">
+                            {% for option in form.voucher_uid.field.choices %}
+                                <option value="{{ option.0 }}" {% if form.voucher_uid.value == option.0 %}selected{% endif %}>{{ option.1 }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 {% endfor %}
             </div>
-            <button type="button" class="btn btn-outline-dark" id="add-voucher" style="margin: 2%;margin-top: 20px">Add Voucher</button>
-            <button type="submit" class="btn btn-outline-dark" style="margin: 2%;margin-top: 20px">Create Ticket</button>
+            <div style="text-align: center">
+                <button type="button" class="btn btn-outline-dark" id="add-voucher" 
+                        style="margin: 2%;margin-top: 20px">Add Voucher</button>
+                <button type="submit" class="btn btn-outline-dark" 
+                        style="margin: 2%;margin-top: 20px">Create Ticket</button>
+            </div>    
         </form>
     </div>
 
