@@ -13,7 +13,7 @@ urlpatterns = [
     path('ticket_info/<str:ticket_code>', views.ticket_info, name='ticket_info'),
     path('add_ticket', views.add_ticket, name='add_ticket'),
     path('success_url', views.show_success_page, name='success_url'),
-    path('update_ticket_vouchers', views.update_ticket_vouchers, name='update_ticket_vouchers')
+    path('update_ticket_vouchers/<str:ticket_code>', views.update_ticket_vouchers, name='update_ticket_vouchers')
 
 ]
 # urlpatterns += static(settings.STATIC_URL, document_root=settings.MEDIA_ROOT)

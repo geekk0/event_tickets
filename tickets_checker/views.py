@@ -161,17 +161,20 @@ def ticket_info(request, ticket_code):
     return render(request, 'ticket_info.html', context)
 
 
-def update_ticket_vouchers(request):
+def update_ticket_vouchers(request, ticket_code):
     if request.method == 'POST':
-        print(request.path)
         for prefix in request.POST:
             if prefix.startswith('voucher_status_'):
                 voucher_id = prefix.replace('voucher_status_', '')
                 voucher_status = request.POST[prefix]
-                print(voucher_status)
                 voucher = Voucher.objects.get(id=voucher_id)
                 voucher.status = voucher_status
                 voucher.save()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+            if prefix == 'holder':
+                ticket = Ticket.objects.get(code=ticket_code)
+                ticket.holder = request.POST[prefix]
+                ticket.save()
+
+        return ticket_info(request, ticket_code)
 
 
