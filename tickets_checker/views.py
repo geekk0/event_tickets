@@ -10,7 +10,7 @@ from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
 # from VideoUploader import settings
 from .forms import LoginForm, ResetPassword, AddTicketForm, TicketForm, VoucherFormSet, VoucherForm
-from .models import Ticket, Voucher  # , Partner, Voucher
+from .models import Ticket, Voucher, Package  # , Partner, Voucher
 from django.urls import reverse_lazy
 # from videofiles.models import Files
 # from django.utils.translation import ugettext as _
@@ -95,46 +95,38 @@ from .forms import TicketForm, VoucherFormSet
 @admin_required
 def add_ticket(request):
     if request.method == 'POST':
-        # Create ticket form instance with POST data
         ticket_form = TicketForm(request.POST)
-        # Initialize an empty list to hold voucher form instances
-        voucher_forms = []
-
         if ticket_form.is_valid():
-            # Save the ticket form
-            ticket = ticket_form.save()
-            print(request.POST)
-            # Process voucher forms from request.POST
-            for prefix in request.POST:
-                if prefix.startswith('ticket_vouchers-') and 'partner' in prefix:
-                    # Get the form data for this voucher form
-                    form_data = request.POST.getlist(prefix)
-                    # Create a new voucher form instance with this data
-                    voucher_form = VoucherForm(data={'partner': request.POST[prefix]})
-                    print(voucher_form)
-                    # voucher_form = VoucherFormSet(prefix=prefix, data={'partner': form_data})
-                    # Check if the voucher form is valid and has partner selected
-                    if voucher_form.is_valid() and voucher_form.cleaned_data.get('partner'):
-                        # Save the voucher form
-                        voucher = voucher_form.save(commit=False)
-                        voucher.ticket = ticket
-                        voucher_forms.append(voucher)  # Append the form to the list
+            ticket_code = ticket_form.cleaned_data['code']
+            ticket_holder = ticket_form.cleaned_data['holder']
+            selected_package = ticket_form.cleaned_data['package']
 
-            # Save all voucher forms together
-            for voucher in voucher_forms:
+            ticket = Ticket.objects.create(code=ticket_code, holder=ticket_holder, package=selected_package)
+            ticket.save()
+
+            package = ticket.package
+
+            for partner in package.partners.all():
+                voucher = Voucher.objects.create(ticket=ticket, partner=partner)
                 voucher.save()
 
-            # Redirect to ticket information page
-            return redirect('ticket_info', ticket_code=ticket.code)
+            if ticket:
+                return redirect('ticket_info', ticket_code=ticket.code)
+            else:
+                return redirect('main')
+        else:
+            error_message = ticket_form.errors
+            packages = Package.objects.all()
+            return render(request, 'add_ticket.html',
+                          {'ticket_form': ticket_form, 'packages': packages, 'error_message': error_message})
 
     else:
-        # Initialize ticket form instance for GET request
         ticket_form = TicketForm()
+        packages = Package.objects.all()
 
-    # Initialize an empty voucher formset for rendering in the template
-    voucher_formset = VoucherFormSet()
-
-    return render(request, 'add_ticket.html', {'ticket_form': ticket_form, 'voucher_formset': voucher_formset})
+        return render(request, 'add_ticket.html',
+                      {'ticket_form': ticket_form,
+                       'packages': packages})
 
 def show_success_page(request):
     return render(request, 'success_page.html')
@@ -171,15 +163,15 @@ def ticket_info(request, ticket_code):
 
 def update_ticket_vouchers(request):
     if request.method == 'POST':
-        print(request.POST)
+        print(request.path)
         for prefix in request.POST:
             if prefix.startswith('voucher_status_'):
                 voucher_id = prefix.replace('voucher_status_', '')
                 voucher_status = request.POST[prefix]
+                print(voucher_status)
                 voucher = Voucher.objects.get(id=voucher_id)
                 voucher.status = voucher_status
                 voucher.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-        return render(request, 'ticket_info.html')
-        # print(form)
 

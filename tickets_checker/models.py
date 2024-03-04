@@ -15,10 +15,22 @@ class Partner(models.Model):
         verbose_name_plural = 'Patrners'
 
 
+class Package(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.CharField(max_length=100)
+    partners = models.ManyToManyField(Partner)
+    # vouchers = models.ManyToManyField('Voucher', blank=True, null=True)
+    tickets = models.ForeignKey('Ticket', on_delete=models.CASCADE, related_name='packages', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Ticket(models.Model):
     code = models.CharField(max_length=100, verbose_name='Ticket unique number', unique=True)
     vouchers = models.ForeignKey(Partner, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Vouchers')
     holder = models.CharField(max_length=250, verbose_name='Ticket holder name', blank=True, null=True)
+    package = models.ForeignKey(Package, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Package')
 
     def __str__(self):
         return self.code
@@ -39,7 +51,7 @@ class Voucher(models.Model):
         #('expired', 'Expired'),
     ]
 
-    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='ticket_vouchers')
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='ticket_vouchers', null=True, blank=True)
     partner = models.ForeignKey(Partner, on_delete=models.CASCADE, verbose_name="Partner")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
 
@@ -49,3 +61,6 @@ class Voucher(models.Model):
     class Meta:
         verbose_name = 'Voucher'
         verbose_name_plural = 'Vouchers'
+
+
+

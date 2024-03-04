@@ -81,12 +81,13 @@ class AddTicketForm(forms.ModelForm):
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
-        fields = ['code', 'holder']
+        fields = ['code', 'holder', 'package']
 
 class VoucherForm(forms.ModelForm):
     class Meta:
         model = Voucher
         fields = ['partner']
+
 
 VoucherFormSet = forms.inlineformset_factory(Ticket, Voucher, form=VoucherForm, extra=1, can_delete=False)
 

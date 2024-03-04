@@ -6,6 +6,7 @@
         list-style: none; 
         padding: 0; 
         margin: 3%;
+        text-align: center;
     }
     
     .voucher-form {
@@ -18,44 +19,45 @@
 {% block content %}
     <div class="col-md-4 offset-4" style="margin:auto;text-align: right">
         <h1 style="text-align: center">Add Ticket</h1>
-        <form method="post">
+        
+        {% if error_message %}
+            <p class="error">{{ error_message }}</p>
+        {% endif %}
+        
+        <form style="width: 50%; margin: auto; text-align: center" id="ticket_form"
+            method="post" name="ticket_form" action="{% url 'add_ticket' %}">
+            
             {% csrf_token %}
-            {{ ticket_form.as_p }}
-            {{ voucher_formset.management_form }}
-            <div id="voucher-forms">
-                {% for form in voucher_formset %}
-                    <div class="voucher-form">
-                        {{ form.as_p }}
-                    </div>
-                {% endfor %}
-            </div>
-            <div style="text-align: center">
-                <button type="button" class="btn btn-outline-dark" id="add-voucher" 
-                        style="margin: 2%;margin-top: 20px">Add Voucher</button>
-                <button type="submit" class="btn btn-outline-dark" 
-                        style="margin: 2%;margin-top: 20px">Create Ticket</button>
-            </div>    
-        </form>
+            
+            <label for="code">Ticket code:</label>
+            <input type="text" name="code" id="code">
+        
+            <label style="margin-top:5%" for="holder">Holder:</label>
+            <input type="text" name="holder" id="holder">
+            
+            <label style="margin-top:5%" for="package">Package</label>
+            
+            <select id="package" name="package">
+                    {% for package in packages %}
+                        <option value="{{ package.id }}">{{ package }}</option>
+                    {% endfor %}
+            </select>
+        
+                <button type="button" id="submit-button" class="btn btn-outline-dark" 
+                                style="margin: 2%;margin-top: 20px">Create Ticket</button>
+            </form>
     </div>
-
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var addVoucherButton = document.getElementById('add-voucher');
-            var voucherFormsContainer = document.getElementById('voucher-forms');
-            var totalForms = document.getElementById('id_form-TOTAL_FORMS');
-
-            var formCount = parseInt('{{ voucher_formset.total_forms }}');
-
-            addVoucherButton.addEventListener('click', function() {
-                var newFormHtml = '{{ voucher_formset.empty_form|escapejs }}'.replace(/__prefix__/g, formCount);
-                var newFormContainer = document.createElement('div');
-                newFormContainer.classList.add('voucher-form');
-                newFormContainer.style.marginTop = '10px'; // Adjust margin-top as needed
-                newFormContainer.innerHTML = newFormHtml;
-                voucherFormsContainer.appendChild(newFormContainer);
-                formCount++;
-                totalForms.setAttribute('value', formCount);
+        $(document).ready(function() {
+            $('#submit-button').click(function() {
+                $('form').submit(); // Submit all forms in the document
             });
         });
     </script>
+
+
+
+
 {% endblock %}

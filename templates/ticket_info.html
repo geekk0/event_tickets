@@ -8,6 +8,10 @@
             <h3><span style="font-size: 14pt">Ticket holder: </span>{{ ticket_info.holder }}</h3>
             <br>
             <h5>Ticket № {{ ticket_info }}</h5>
+            <br>
+            <h5>Package: {{ ticket_info.package }}</h5>
+            <br>
+            <h5>price:  {{ ticket_info.package.price }}</h5>
         </div>
         <div style="width: 70%; margin: auto; margin-top: 5%;  text-align: center">
             {% if vouchers %}
