@@ -38,6 +38,7 @@ class Ticket(models.Model):
     holder = models.CharField(max_length=250, verbose_name='Ticket holder name', blank=True, null=True)
     package = models.ForeignKey(Package, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Package')
     number = models.IntegerField(verbose_name='Ticket number', unique=True, blank=True, null=True)
+    qr_link = models.TextField(verbose_name='Link for QR code', blank=True, null=True)
 
     def __str__(self):
         return str(self.number)
@@ -47,6 +48,8 @@ class Ticket(models.Model):
             self.code = self.generate_unique_code()
         if not self.number:
             self.number = self.id
+        if not self.qr_link:
+            self.qr_link = f'http://141.8.195.70:8003/ticket_info/{self.code}'
         super().save(*args, **kwargs)
 
     class Meta:
@@ -65,7 +68,8 @@ class Ticket(models.Model):
         tickets = Ticket.objects.all()
         info_txt = 'All tickets list:\n'
         for ticket in tickets:
-            ticket_info_block = f'number: {ticket.number}, code: {ticket.code}, package: {ticket.package};\n'
+            ticket_info_block = (f'number: {ticket.number}, code: {ticket.code}, holder: {ticket.holder},'
+                                 f' \n qr_link: {ticket.qr_link};\n')
             info_txt += ticket_info_block
         telegram_bot = TelegramBot()
         telegram_bot.send_message(info_txt)
@@ -77,7 +81,7 @@ class Ticket(models.Model):
             vouchers = Voucher.objects.filter(partner=partner)
             for voucher in vouchers:
                 ticket = voucher.ticket
-                ticket_info_block = f'number: {ticket.number}, code: {ticket.code}, package: {ticket.package};\n'
+                ticket_info_block = f'number: {ticket.number}, code: {ticket.code}, holder: {ticket.holder}\n'
                 info_txt += ticket_info_block
             telegram_bot = TelegramBot()
             telegram_bot.send_message(info_txt)
