@@ -11,6 +11,17 @@
                 <a href="{% url 'login' %}" class="btn btn-outline-dark">Sign in</a>
             </div>
         {% endif %}
+
+        {% if user.is_superuser %}
+            <div class="col-4 offset-4" style="text-align: center; margin-top:2%">
+                <a class="btn btn-outline-dark" style=""
+                   href="{% url 'send_all_tickets_info' %}">Send all tickets info</a>
+            </div>
+            <div class="col-4 offset-4" style="text-align: center; margin-top:2%">
+                <a class="btn btn-outline-dark" style=""
+                   href="{% url 'send_tickets_info_attached_to_partner' %}">Send tickets info by partner</a>
+            </div>
+        {% endif %}
            
     </div>
     {% if user.is_authenticated %}

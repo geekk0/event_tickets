@@ -1,8 +1,12 @@
 import secrets
 import string
+import time
 
 from django.db import models
 from django.contrib.auth.models import User
+
+from . import tg_bot
+from .tg_bot import TelegramBot
 
 
 class Partner(models.Model):
@@ -56,8 +60,27 @@ class Ticket(models.Model):
             if not Ticket.objects.filter(code=code).exists():
                 return code
 
-    # def get(self, ticket_uid):
-    #     return Tickets.objects.get(uid=ticket_uid)
+    @staticmethod
+    def send_all_tickets_info():
+        tickets = Ticket.objects.all()
+        info_txt = 'All tickets list:\n'
+        for ticket in tickets:
+            ticket_info_block = f'number: {ticket.number}, code: {ticket.code}, package: {ticket.package};\n'
+            info_txt += ticket_info_block
+        telegram_bot = TelegramBot()
+        telegram_bot.send_message(info_txt)
+
+    @staticmethod
+    def send_tickets_info_attached_to_partner():
+        for partner in Partner.objects.all():
+            info_txt = f'Partner: {partner.name}\n'
+            vouchers = Voucher.objects.filter(partner=partner)
+            for voucher in vouchers:
+                ticket = voucher.ticket
+                ticket_info_block = f'number: {ticket.number}, code: {ticket.code}, package: {ticket.package};\n'
+                info_txt += ticket_info_block
+            telegram_bot = TelegramBot()
+            telegram_bot.send_message(info_txt)
 
 
 class Voucher(models.Model):

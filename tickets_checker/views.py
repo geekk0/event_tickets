@@ -187,3 +187,11 @@ def update_ticket_vouchers(request, ticket_code):
         return ticket_info(request, ticket_code)
 
 
+def send_all_tickets_info(request):
+    Ticket.send_all_tickets_info()
+    return redirect('main')
+
+
+def send_tickets_info_attached_to_partner(request):
+    Ticket.send_tickets_info_attached_to_partner()
+    return redirect('main')
