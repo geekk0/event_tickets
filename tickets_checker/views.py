@@ -95,25 +95,28 @@ from .forms import TicketForm, VoucherFormSet
 @admin_required
 def add_ticket(request):
     if request.method == 'POST':
+        quantity = int(request.POST.get('quantity'))
+
         ticket_form = TicketForm(request.POST)
         if ticket_form.is_valid():
-            ticket_code = ticket_form.cleaned_data['code']
-            ticket_holder = ticket_form.cleaned_data['holder']
-            selected_package = ticket_form.cleaned_data['package']
+            for i in range(quantity):
+                ticket_holder = ticket_form.cleaned_data['holder']
+                selected_package = ticket_form.cleaned_data['package']
 
-            ticket = Ticket.objects.create(code=ticket_code, holder=ticket_holder, package=selected_package)
-            ticket.save()
+                ticket = Ticket.objects.create(holder=ticket_holder, package=selected_package)
+                ticket.save()
 
-            package = ticket.package
+                package = ticket.package
 
-            for partner in package.partners.all():
-                voucher = Voucher.objects.create(ticket=ticket, partner=partner)
-                voucher.save()
+                for partner in package.partners.all():
+                    voucher = Voucher.objects.create(ticket=ticket, partner=partner)
+                    voucher.save()
 
-            if ticket:
-                return redirect('ticket_info', ticket_code=ticket.code)
-            else:
-                return redirect('main')
+            return redirect('main')
+            # if ticket:
+            #     return redirect('ticket_info', ticket_code=ticket.code)
+            # else:
+            #     return redirect('main')
         else:
             error_message = ticket_form.errors
             packages = Package.objects.all()
