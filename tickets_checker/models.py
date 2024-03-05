@@ -36,7 +36,7 @@ class Ticket(models.Model):
     number = models.IntegerField(verbose_name='Ticket number', unique=True, blank=True, null=True)
 
     def __str__(self):
-        return self.number
+        return str(self.number)
 
     def save(self, *args, **kwargs):
         if not self.code:
