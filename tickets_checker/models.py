@@ -1,11 +1,11 @@
 from django.db import models
-from django.utils import timezone
-# from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
 
 
 class Partner(models.Model):
     name = models.CharField(verbose_name="Partner name", max_length=100)
     image = models.ImageField(upload_to='partner_images', null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name="User")
 
     def __str__(self):
         return self.name

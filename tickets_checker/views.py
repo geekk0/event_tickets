@@ -153,7 +153,13 @@ def main(request):
 def ticket_info(request, ticket_code):
     try:
         ticket = Ticket.objects.get(code=ticket_code)
+        partners = ticket.package.partners.all()
+        for partner in partners:
+            if not Voucher.objects.filter(ticket=ticket, partner=partner).exists():
+                voucher = Voucher.objects.create(ticket=ticket, partner=partner)
+                voucher.save()
         vouchers = Voucher.objects.filter(ticket=ticket)
+        print(vouchers)
         context = {'ticket_info': ticket, 'vouchers': vouchers}
     except Ticket.DoesNotExist:
         context = {'error': 'Ticket not found'}
