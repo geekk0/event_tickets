@@ -72,7 +72,7 @@ class Ticket(models.Model):
                                  f' \n qr_link: {ticket.qr_link};\n')
             info_txt += ticket_info_block
         telegram_bot = TelegramBot()
-        telegram_bot.send_message(info_txt)
+        telegram_bot.send_all_tickets(info_txt)
 
     @staticmethod
     def send_tickets_info_attached_to_partner():
@@ -84,7 +84,7 @@ class Ticket(models.Model):
                 ticket_info_block = f'number: {ticket.number}, code: {ticket.code}, holder: {ticket.holder}\n'
                 info_txt += ticket_info_block
             telegram_bot = TelegramBot()
-            telegram_bot.send_message(info_txt)
+            telegram_bot.send_all_tickets(info_txt)
 
 
 class Voucher(models.Model):
