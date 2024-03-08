@@ -195,3 +195,8 @@ def send_all_tickets_info(request):
 def send_tickets_info_attached_to_partner(request):
     Ticket.send_tickets_info_attached_to_partner()
     return redirect('main')
+
+def create_ticket_qr_code(request, ticket_code):
+    ticket = Ticket.objects.get(code=ticket_code)
+    ticket.create_qr_code()
+    ticket.save()

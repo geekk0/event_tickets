@@ -4,6 +4,7 @@ import time
 
 from django.db import models
 from django.contrib.auth.models import User
+from qrcodes import QRCode
 
 from . import tg_bot
 from .tg_bot import TelegramBot
@@ -39,6 +40,9 @@ class Ticket(models.Model):
     package = models.ForeignKey(Package, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Package')
     number = models.IntegerField(verbose_name='Ticket number', unique=True, blank=True, null=True)
     qr_link = models.TextField(verbose_name='Link for QR code', blank=True, null=True)
+    qr_image = models.ImageField(upload_to='qr_images', null=True, blank=True)
+    ticket_image_template = models.ImageField(upload_to='ticket_image_templates', null=True, blank=True)
+    image = models.ImageField(upload_to='tickets_images', null=True, blank=True)
 
     def __str__(self):
         return str(self.number)
@@ -85,6 +89,11 @@ class Ticket(models.Model):
                 info_txt += ticket_info_block
             telegram_bot = TelegramBot()
             telegram_bot.send_all_tickets(info_txt)
+
+    def create_qr_code(self):
+        qr_code = QRCode(self.qr_link)
+        qr_code.create_qr_code_image()
+        qr_code.image.save(self.qr_image)
 
 
 class Voucher(models.Model):

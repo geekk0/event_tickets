@@ -17,6 +17,7 @@ urlpatterns = [
     path('send_all_tickets_info', views.send_all_tickets_info, name='send_all_tickets_info'),
     path('send_tickets_info_attached_to_partner', views.send_tickets_info_attached_to_partner,
          name='send_tickets_info_attached_to_partner'),
+    path('create_ticket_qr_code/<str:ticket_code>', views.create_ticket_qr_code, name='create_ticket_qr_code'),
 
 ]
 # urlpatterns += static(settings.STATIC_URL, document_root=settings.MEDIA_ROOT)
