@@ -110,6 +110,8 @@ def add_ticket(request):
 
                 for partner in package.partners.all():
                     voucher = Voucher.objects.create(ticket=ticket, partner=partner)
+                    if partner.facilitator:
+                        voucher.activities = True
                     voucher.save()
 
             return redirect('main')
@@ -161,17 +163,20 @@ def ticket_info(request, ticket_code):
             if not Voucher.objects.filter(ticket=ticket, partner=partner).exists():
                 voucher = Voucher.objects.create(ticket=ticket, partner=partner)
                 voucher.save()
-        vouchers = Voucher.objects.filter(ticket=ticket)
+        vouchers = Voucher.objects.filter(ticket=ticket, activities=False)
+        activities = Voucher.objects.filter(ticket=ticket, activities=True)
         print(vouchers)
-        context = {'ticket_info': ticket, 'vouchers': vouchers}
+        context = {'ticket_info': ticket, 'vouchers': vouchers, 'activities': activities}
     except Ticket.DoesNotExist:
         context = {'error': 'Ticket not found'}
 
     return render(request, 'ticket_info.html', context)
 
 
+@login_required(login_url='/login/')
 def update_ticket_vouchers(request, ticket_code):
     if request.method == 'POST':
+        print(request.POST)
         for prefix in request.POST:
             if prefix.startswith('voucher_status_'):
                 voucher_id = prefix.replace('voucher_status_', '')

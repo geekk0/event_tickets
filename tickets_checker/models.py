@@ -4,7 +4,7 @@ import time
 
 from django.db import models
 from django.contrib.auth.models import User
-from qrcodes import QRCode
+from .qrcodes import QRCode
 
 from . import tg_bot
 from .tg_bot import TelegramBot
@@ -14,6 +14,7 @@ class Partner(models.Model):
     name = models.CharField(verbose_name="Partner name", max_length=100)
     image = models.ImageField(upload_to='partner_images', null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name="User")
+    facilitator = models.BooleanField(verbose_name="Is facilitator", default=False)
 
     def __str__(self):
         return self.name
@@ -105,8 +106,9 @@ class Voucher(models.Model):
     ]
 
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='ticket_vouchers', null=True, blank=True)
-    partner = models.ForeignKey(Partner, on_delete=models.CASCADE, verbose_name="Partner")
+    partner = models.ForeignKey(Partner, on_delete=models.CASCADE, verbose_name="Partner", null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+    activities = models.BooleanField(default=False, verbose_name='Is activities')
 
     def __str__(self):
         return f"Voucher for {self.partner} (Ticket: {self.ticket.code})"

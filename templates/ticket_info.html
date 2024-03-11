@@ -29,17 +29,78 @@
                 <h5>price:  {{ ticket_info.package.price }}</h5>
             </div>
             <div style="margin: auto; margin-top: 5%;  text-align: center">
-                {% if vouchers %}
-                  <h4>Vouchers:</h4>
+                <h4>Activities:</h4>
+                <br>
+                <ul style="list-style: none;" class="col-12 col-md-8 offset-md-2">
+                        {% for activity in activities %}
+                            {% if user == activity.partner.user or user.is_superuser %}
+                                <li>
+                                    <div class="row col-12  col-md-10 offset-md-1" style="display: block ruby; margin-top:2%">
+                                        <div class="col-2 col-md-4" >
+                                            {% if activity.partner.image %}
+                                                    <img src="{{ activity.partner.image.url }}" 
+                                                         alt="{{ activity.partner.name }} 
+                                                         Image"
+                                                        style="width: 100%">
+                                            {% else %}
+                                                    <p></p>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-3 col-md-4">&nbsp; {{ activity.partner }} &nbsp;</div>
+
+                                        <div class="col-6 col-md-4">
+                                            <select class="form-select" style="" name="voucher_status_{{ activity.id }}">
+                                                <option value="active" {% if activity.status == 'active' %}selected{% endif %}>Active</option>
+                                                <option value="used" {% if activity.status == 'used' %}selected{% endif %}>Used</option>
+                                                <!--<option value="expired" {% if activity.status == 'expired' %}selected{% endif %}>Expired</option>-->
+                                            </select>
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <div class="row col-12  col-md-10 offset-md-1">
+                                        {% if activity.partner.image %}
+                                            <div class="col-2 col-md-4">
+                                                <img src="{{ activity.partner.image.url }}" 
+                                                     alt="{{ activity.partner.name }} 
+                                                     Image"
+                                                     style="width: 100%">
+                                            </div>
+                                        {% else %}
+                                            <p></p>
+                                        {% endif %}
+
+                                        <p style="" class="col-3 col-md-4">{{ activity.partner }}</p>
+
+                                        <span class="col-6 col-md-4" style="color:
+                                            {% if activity.status == 'active' %}
+                                                green
+                                            {% elif activity.status == 'used' %}
+                                                rgba(114,53,227,0.89)
+                                            {% elif activity.status == 'expired' %}
+                                                red
+                                            {% endif %};">
+                                            {{ activity.status|title }}
+                                        </span>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                      </ul>
+                    
+                <h4>Vouchers:</h4>
                         <br>
                         <ul style="list-style: none;" class="col-12 col-md-8 offset-md-2">
                         {% for voucher in vouchers %}
                             {% if user == voucher.partner.user or user.is_superuser %}
                                 <li>
                                     <div class="row col-12  col-md-10 offset-md-1" style="display: block ruby; margin-top:2%">
-                                        <div class="col-2 col-md-4" >
+                                        <div class="col-2 col-md-4 voucher_image" >
                                             {% if voucher.partner.image %}
-                                                    <img src="{{ voucher.partner.image.url }}" alt="{{ voucher.partner.name }} Image">
+                                                    <img src="{{ voucher.partner.image.url }}" 
+                                                         alt="{{ voucher.partner.name }} Image"
+                                                        style="width: 100%">
                                             {% else %}
                                                     <p></p>
                                             {% endif %}
@@ -57,10 +118,14 @@
                                 </li>
                             {% else %}
                                 <li>
-                                    <div class="row col-12  col-md-10 offset-md-1">
+                                    {% if voucher.status == 'active' %}
+                                        <div class="row col-12  col-md-10 offset-md-1">
                                         {% if voucher.partner.image %}
                                             <div class="col-2 col-md-4">
-                                                <img src="{{ voucher.partner.image.url }}" alt="{{ voucher.partner.name }} Image">
+                                                <img src="{{ voucher.partner.image.url }}" 
+                                                     alt="{{ voucher.partner.name }} 
+                                                     Image"
+                                                        style="width: 100%">
                                             </div>
                                         {% else %}
                                             <p></p>
@@ -79,17 +144,15 @@
                                             {{ voucher.status|title }}
                                         </span>
                                     </div>
+                                    {% endif %}
                                 </li>
                             {% endif %}
                         {% endfor %}
                       </ul>
-                      {% if user.is_authenticated %}  
-                        <button type="submit" class="btn btn-outline-dark" style="margin-top: 2%">Update Vouchers</button>
-                      {% endif %}
-                    </form>
-                {% else %}
-                  <p>No vouchers found for this ticket.</p>
+                
+                {% if user.is_authenticated %}  
+                    <button type="submit" class="btn btn-outline-dark" style="margin-top: 2%">Update Vouchers</button>
                 {% endif %}
-            </div>
+        </form>
     {% endif %}
 {% endblock %}
