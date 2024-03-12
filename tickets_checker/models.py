@@ -108,7 +108,6 @@ class Voucher(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='ticket_vouchers', null=True, blank=True)
     partner = models.ForeignKey(Partner, on_delete=models.CASCADE, verbose_name="Partner", null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
-    activities = models.BooleanField(default=False, verbose_name='Is activities')
 
     def __str__(self):
         return f"Voucher for {self.partner} (Ticket: {self.ticket.code})"

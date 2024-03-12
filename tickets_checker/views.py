@@ -163,8 +163,8 @@ def ticket_info(request, ticket_code):
             if not Voucher.objects.filter(ticket=ticket, partner=partner).exists():
                 voucher = Voucher.objects.create(ticket=ticket, partner=partner)
                 voucher.save()
-        vouchers = Voucher.objects.filter(ticket=ticket, activities=False)
-        activities = Voucher.objects.filter(ticket=ticket, activities=True)
+        vouchers = Voucher.objects.filter(ticket=ticket, partner__facilitator=False)
+        activities = Voucher.objects.filter(ticket=ticket, partner__facilitator=True)
         print(vouchers)
         context = {'ticket_info': ticket, 'vouchers': vouchers, 'activities': activities}
     except Ticket.DoesNotExist:
