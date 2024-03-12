@@ -35,6 +35,7 @@ class Package(models.Model):
 
 
 class Ticket(models.Model):
+
     code = models.CharField(max_length=100, verbose_name='Ticket unique number', unique=True, null=True, blank=True)
     vouchers = models.ForeignKey(Partner, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Vouchers')
     holder = models.CharField(max_length=250, verbose_name='Ticket holder name', blank=True, null=True)
@@ -44,6 +45,12 @@ class Ticket(models.Model):
     qr_image = models.ImageField(upload_to='qr_images', null=True, blank=True)
     ticket_image_template = models.ImageField(upload_to='ticket_image_templates', null=True, blank=True)
     image = models.ImageField(upload_to='tickets_images', null=True, blank=True)
+    payment_status = models.CharField(max_length=20,
+                                      choices=[('Paid', 'Paid'), ('Not paid', 'Not paid')],
+                                      default='Not paid')
+    payment_method = models.CharField(max_length=20,
+                                      choices=[('Cash', 'Cash'), ('GCash', 'GCash')],
+                                      default='Cash')
 
     def __str__(self):
         return str(self.number)

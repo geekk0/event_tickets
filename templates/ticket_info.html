@@ -24,7 +24,32 @@
                 <br>
                 <h5>Ticket code: {{ ticket_info.code }}</h5>
                 <br>
-                <h5>Package: {{ ticket_info.package }}</h5>
+                {% if user.is_staff %}
+                    <div class=" col-4 offset-4">
+                        <h5>Package:</h5>
+                        <select class="form-select" style="" name="package">
+                            {% for package in packages %}
+                                <option value={{ package.id }} {% if package == ticket_info.package %}selected{% endif %}>{{ package.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <h5>Payment status:</h5>
+                        <select class="form-select" style="" name="payment_status">
+                            <option value="Not paid" {% if ticket_info.payment_status == "Not paid" %}selected{% endif %}>Not paid</option>
+                            <option value="Paid" {% if ticket_info.payment_status == "Paid" %}selected{% endif %}>Paid</option>
+                        </select>
+                        <br>
+                        <h5>Payment method:</h5>
+                        <select class="form-select" style="" name="payment_method">
+                            <option value="Cash" {% if ticket_info.payment_method == "Cash" %}selected{% endif %}>Cash</option>
+                            <option value="GCash" {% if ticket_info.payment_method == "GCash" %}selected{% endif %}>GCash</option>
+                        </select>
+                    </div>
+                {% else %}    
+                    <h5>Package: {{ ticket_info.package }}</h5>
+                    <h5>Payment status: {{ ticket_info.payment_status }}</h5>
+                    <h5>Payment method: {{ ticket_info.payment_method }}</h5>
+                {% endif %}    
                 <br>
                 <h5>price:  {{ ticket_info.package.price }}</h5>
             </div>

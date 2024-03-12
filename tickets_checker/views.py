@@ -165,8 +165,9 @@ def ticket_info(request, ticket_code):
                 voucher.save()
         vouchers = Voucher.objects.filter(ticket=ticket, partner__facilitator=False)
         activities = Voucher.objects.filter(ticket=ticket, partner__facilitator=True)
-        print(vouchers)
-        context = {'ticket_info': ticket, 'vouchers': vouchers, 'activities': activities}
+        packages = Package.objects.all()
+        context = {'ticket_info': ticket, 'vouchers': vouchers,
+                   'activities': activities, 'packages': packages}
     except Ticket.DoesNotExist:
         context = {'error': 'Ticket not found'}
 
@@ -176,7 +177,8 @@ def ticket_info(request, ticket_code):
 @login_required(login_url='/login/')
 def update_ticket_vouchers(request, ticket_code):
     if request.method == 'POST':
-        print(request.POST)
+        ticket = Ticket.objects.get(code=ticket_code)
+
         for prefix in request.POST:
             if prefix.startswith('voucher_status_'):
                 voucher_id = prefix.replace('voucher_status_', '')
@@ -184,12 +186,15 @@ def update_ticket_vouchers(request, ticket_code):
                 voucher = Voucher.objects.get(id=voucher_id)
                 voucher.status = voucher_status
                 voucher.save()
-            if prefix == 'holder':
-                ticket = Ticket.objects.get(code=ticket_code)
-                ticket.holder = request.POST[prefix]
-                ticket.save()
+            elif prefix == 'package':
+                ticket.package = Package.objects.get(id=request.POST[prefix])
+            elif 'csrf' not in prefix:
+                setattr(ticket, prefix, request.POST[prefix])
 
-        return ticket_info(request, ticket_code)
+        ticket.save()
+
+    # return redirect('ticket_info', ticket_code=ticket_code)
+    return ticket_info(request, ticket_code)
 
 
 def send_all_tickets_info(request):
