@@ -19,6 +19,7 @@
                 {% else %}    
                     <p><span style="font-size: 14pt">Ticket holder: </span>{{ ticket_info.holder }}</p>
                 {% endif %}
+                <br>
                 <p>Ticket number: {{ ticket_info.number }}</p>
                 <p>Ticket code: {{ ticket_info.code }}</p>
                 <br>
@@ -66,18 +67,18 @@
                                     <div class="row col-12  col-md-10 offset-md-1" style="display: block ruby; 
                                     margin-top:2%">
 
-                                        <div class="col-5 col-md-4" >
+                                        <!--<div class="col-5 col-md-4" >
                                             {% if activity.partner.image %}
                                                     <img src="{{ activity.partner.image.url }}" 
                                                          alt="{{ activity.partner.name }} 
                                                          Image"
                                                         style="width: 100%">
                                             {% endif %}
-                                        </div>
+                                        </div>-->
 
 
 
-                                        <div class="col-6 col-md-4">
+                                        <div class="col-8 col-md-4 offsfet-2">
                                             <select class="form-select" style="" name="voucher_status_{{ activity.id }}">
                                                 <option value="active" {% if activity.status == 'active' %}selected{% endif %}>Active</option>
                                                 <option value="used" {% if activity.status == 'used' %}selected{% endif %}>Used</option>
