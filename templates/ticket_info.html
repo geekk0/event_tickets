@@ -77,7 +77,8 @@
 
 
 
-                                        <div class="col-6 col-md-4">
+                                        <div {% if activity.partner.image %} class="col-6 col-md-4" 
+                                            {% else %} class="col-6 col-md-4 offset-6" {% endif %}>
                                             <select class="form-select" style="" name="voucher_status_{{ activity.id }}">
                                                 <option value="active" {% if activity.status == 'active' %}selected{% endif %}>Active</option>
                                                 <option value="used" {% if activity.status == 'used' %}selected{% endif %}>Used</option>
