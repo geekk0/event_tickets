@@ -17,62 +17,65 @@
                     <input type="text" name="holder" id="holder" value="{{ ticket_info.holder }}">
                     <br>
                 {% else %}    
-                    <h3><span style="font-size: 14pt">Ticket holder: </span>{{ ticket_info.holder }}</h3>
+                    <p><span style="font-size: 14pt">Ticket holder: </span>{{ ticket_info.holder }}</p>
                 {% endif %}
-                <br>
-                <h5>Ticket number: {{ ticket_info.number }}</h5>
-                <br>
-                <h5>Ticket code: {{ ticket_info.code }}</h5>
+                <p>Ticket number: {{ ticket_info.number }}</p>
+                <p>Ticket code: {{ ticket_info.code }}</p>
                 <br>
                 {% if user.is_staff %}
                     <div class=" col-6 offset-3">
-                        <h5>Package:</h5>
+                        <p>Package:</p>
                         <select class="form-select" style="" name="package">
                             {% for package in packages %}
                                 <option value={{ package.id }} {% if package == ticket_info.package %}selected{% endif %}>{{ package.name }}</option>
                             {% endfor %}
                         </select>
                         <br>
-                        <h5>Payment status:</h5>
+                        <p>Payment status:</p>
                         <select class="form-select" style="" name="payment_status">
                             <option value="Not paid" {% if ticket_info.payment_status == "Not paid" %}selected{% endif %}>Not paid</option>
                             <option value="Paid" {% if ticket_info.payment_status == "Paid" %}selected{% endif %}>Paid</option>
                         </select>
                         <br>
-                        <h5>Payment method:</h5>
+                        <p>Payment method:</p>
                         <select class="form-select" style="" name="payment_method">
                             <option value="Cash" {% if ticket_info.payment_method == "Cash" %}selected{% endif %}>Cash</option>
                             <option value="GCash" {% if ticket_info.payment_method == "GCash" %}selected{% endif %}>GCash</option>
                         </select>
                     </div>
                 {% else %}    
-                    <h5>Package: {{ ticket_info.package }}</h5>
-                    <h5>Payment status: {{ ticket_info.payment_status }}</h5>
-                    <h5>Payment method: {{ ticket_info.payment_method }}</h5>
+                    <p>Package: {{ ticket_info.package }}</p>
+                    <p>Payment status: {{ ticket_info.payment_status }}</p>
+                    <p>Payment method: {{ ticket_info.payment_method }}</p>
                 {% endif %}    
-                <br>
-                <h5>price:  {{ ticket_info.package.price }}</h5>
+                <p>price:  {{ ticket_info.package.price }}</p>
             </div>
             <div style="margin: auto; margin-top: 5%;  text-align: center">
-                <h4>Activities:</h4>
                 <br>
+                <h4>Activities:</h4>
                 <ul style="list-style: none;" class="col-12 col-md-8 offset-md-2">
                         {% for activity in activities %}
                             {% if user == activity.partner.user or user.is_superuser %}
+                                <br>
                                 <li>
-                                    <div class="row col-12  col-md-10 offset-md-1" style="display: block ruby; margin-top:2%">
-                                        <div class="col-2 col-md-4" >
+                                    <div class="row col-12">
+                                        <div class="col-12 col-md-4">&nbsp; {{ activity.partner }} &nbsp;</div>
+                                    </div>
+
+
+                                    <div class="row col-12  col-md-10 offset-md-1" style="display: block ruby; 
+                                    margin-top:2%">
+
+                                        <div class="col-5 col-md-4" >
                                             {% if activity.partner.image %}
                                                     <img src="{{ activity.partner.image.url }}" 
                                                          alt="{{ activity.partner.name }} 
                                                          Image"
                                                         style="width: 100%">
-                                            {% else %}
-                                                    <p></p>
                                             {% endif %}
                                         </div>
 
-                                        <div class="col-3 col-md-4">&nbsp; {{ activity.partner }} &nbsp;</div>
+
 
                                         <div class="col-6 col-md-4">
                                             <select class="form-select" style="" name="voucher_status_{{ activity.id }}">
@@ -83,22 +86,25 @@
                                     </div>
                                 </li>
                             {% else %}
+                                <br>
                                 <li>
-                                    <div class="row col-12  col-md-10 offset-md-1">
+
+                                    <div class="row col-12">
+                                        <div class="col-12 col-md-4">&nbsp; {{ activity.partner }} &nbsp;</div>
+                                    </div>
+
+                                    <div class="row col-12  col-md-10 offset-md-1" style="margin-top: 2%">
                                         {% if activity.partner.image %}
-                                            <div class="col-2 col-md-4">
+                                            <div class="col-6 col-md-4">
                                                 <img src="{{ activity.partner.image.url }}" 
                                                      alt="{{ activity.partner.name }} 
                                                      Image"
                                                      style="width: 100%">
                                             </div>
-                                        {% else %}
-                                            <p></p>
                                         {% endif %}
 
-                                        <p style="" class="col-3 col-md-4">{{ activity.partner }}</p>
-
-                                        <span class="col-6 col-md-4" style="color:
+                                        <span {% if activity.partner.image %} class="col-6 col-md-4" 
+                                            {% else %} class="col-6 col-md-4 offset-6" {% endif %} style="color:
                                             {% if activity.status == 'active' %}
                                                 green
                                             {% elif activity.status == 'used' %}
@@ -120,20 +126,23 @@
                         {% for voucher in vouchers %}
                             {% if user == voucher.partner.user or user.is_superuser %}
                                 <li>
-                                    <div class="row col-12  col-md-10 offset-md-1" style="display: block ruby; margin-top:2%">
-                                        <div class="col-2 col-md-4 voucher_image" >
+
+                                    <div class="row col-12">
+                                        <div class="col-12 col-md-4">&nbsp; {{ activity.partner }} &nbsp;</div>
+                                    </div>
+
+                                    <div class="row col-12  col-md-10 offset-md-1" 
+                                         style="display: block ruby; margin-top:2%">
+                                        <div class="col-5 col-md-4 voucher_image" >
                                             {% if voucher.partner.image %}
                                                     <img src="{{ voucher.partner.image.url }}" 
                                                          alt="{{ voucher.partner.name }} Image"
                                                         style="width: 100%">
-                                            {% else %}
-                                                    <p></p>
                                             {% endif %}
                                         </div>
 
-                                        <div class="col-3 col-md-4">&nbsp; {{ voucher.partner }} &nbsp;</div>
-
-                                        <div class="col-6 col-md-4">
+                                        <div {% if voucher.partner.image %} class="col-6 col-md-4" 
+                                            {% else %} class="col-6 col-md-4 offset-6" {% endif %}>
                                             <select class="form-select" style="" name="voucher_status_{{ voucher.id }}">
                                                 <option value="active" {% if voucher.status == 'active' %}selected{% endif %}>Active</option>
                                                 <option value="used" {% if voucher.status == 'used' %}selected{% endif %}>Used</option>
@@ -144,21 +153,24 @@
                             {% else %}
                                 <li>
                                     {% if voucher.status == 'active' %}
-                                        <div class="row col-12  col-md-10 offset-md-1">
+
+                                        <div class="row col-12">
+                                            <div class="col-12 col-md-4">&nbsp; {{ voucher.partner }} &nbsp;</div>
+                                        </div>
+
+                                        <div class="row col-12  col-md-10 offset-md-1" style="margin-top: 2%">
                                         {% if voucher.partner.image %}
-                                            <div class="col-2 col-md-4">
+                                            <div class="col-6 col-md-4">
                                                 <img src="{{ voucher.partner.image.url }}" 
                                                      alt="{{ voucher.partner.name }} 
                                                      Image"
                                                         style="width: 100%">
                                             </div>
-                                        {% else %}
-                                            <p></p>
                                         {% endif %}
 
-                                        <p style="" class="col-3 col-md-4">{{ voucher.partner }}</p>
 
-                                        <span class="col-6 col-md-4" style="color:
+                                        <span {% if voucher.partner.image %} class="col-6 col-md-4" 
+                                            {% else %} class="col-6 col-md-4 offset-6" {% endif %} style="color:
                                             {% if voucher.status == 'active' %}
                                                 green
                                             {% elif voucher.status == 'used' %}
