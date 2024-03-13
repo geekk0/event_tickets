@@ -11,7 +11,7 @@
     <div class="col-md-4 offset-md-4">
 
         <div class="auth col-md-6 offset-md-3">
-
+            <br>
             <h4 style="" class="text-center">Authorization</h4>
             {% if messages %}
                 <ul class="messages">
@@ -25,8 +25,7 @@
                     {% endfor %}
                 </ul>
             {% endif %}
-
-            <form style="" action ='' class="" method="POST">
+            <form style="" action ='' class="col-8 offset-2" method="POST">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <input style="margin-top: 4%" type="submit" class="btn btn-outline-dark" value="Sign In">

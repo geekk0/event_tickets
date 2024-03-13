@@ -16,13 +16,13 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}">
 
     {% block title %}
-        <title>Women's Day event</title>
+        <title>She Sails!</title>
     {% endblock %}
 
     <style>
         
         .custom-bg-color {
-            background-color: #db4fc5;
+            <!--background-color: #db4fc5;-->
         }
         
         <!--.custom-bg-primary textarea {
@@ -38,37 +38,37 @@
 
 <body style="width:95%; margin: auto">
 
-        <header class="base_header row align-bottom" style="max-width: 100%">
+        <header class="" style="width:100%">
 
             {% if request.user.is_authenticated %}
-                <div class="col-md-3 offset-md-1">
-                    <nav class="navbar navbar-expand">
-                        <div class="collapse navbar-collapse">
-                            <p style="text-align: center;color: #db4fc5;font-size: 24pt" class="nav-link display-5;">Women's Day event</p>
-                        </div>
-
-                    </nav>
-                </div>
-
-
-
-                    <div class="col-md-7 col-xs-12 offset=5 " style="margin-top: 0.8%">
-                        <nav class="navbar navbar-expand custom-bg-color">
+                
+                
+                <div class="col-10 offset-1" style="margin-top: 0.8%">
+                    <nav class="navbar navbar-expand custom-bg-color">
                             <div class="collapse navbar-collapse justify-content-center">
                                 <ul class="navbar-nav mr-auto">
                                     <li class="header_label navbar-brand-collapse"><a class="nav-link link-dark">{% trans "User:" %} {{ request.user.username }}</a></li>
                                     {% if user.is_superuser %}
                                         <li class="header_label navbar-brand-collapse"><a href="{% url "add_ticket" %}" class="nav-link link-dark">Add ticket</a></li>
                                     {% endif %}
-                                    <li class="header_label navbar-brand-collapse"><a class="nav-link link-dark" id="logout_link" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
+                                    <li class=""><a class="btn btn-outline-dark" id="logout_link" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
 
 
                                 </ul>
                             </div>
                         </nav>
+                </div>
+                
+                <div class="col-8 offset-2">
+                    <div class="">
+                        <div class="col-8 offset-2">
+                            <h1 style="text-align: center;color: #db4fc5;" class="">She Sails!</h1>
+                        </div>
+
                     </div>
+                </div>
             {% else %}
-                <h3 href="/" class="nav-link display-5" style="text-align: center;color: #db4fc5; margin-top: 2%">Women's Day event</h3>
+                <h3 href="/" class="nav-link display-5" style="text-align: center;color: #db4fc5;">She Sails!</h3>
             {% endif %}
         </header>
 
