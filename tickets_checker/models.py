@@ -51,6 +51,7 @@ class Ticket(models.Model):
     payment_method = models.CharField(max_length=20,
                                       choices=[('Cash', 'Cash'), ('GCash', 'GCash')],
                                       default='Cash')
+    post_discount = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.number)

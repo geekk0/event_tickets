@@ -49,7 +49,12 @@
                     <p>Payment status: {{ ticket_info.payment_status }}</p>
                     <p>Payment method: {{ ticket_info.payment_method }}</p>
                 {% endif %}    
+                <br>
                 <p>price:  {{ ticket_info.package.price }}</p>
+                <input type="checkbox" name="post_discount" id="post_discount" 
+                       {% if ticket_info.post_discount == True %} checked {% endif %}>
+                <label for="post_discount">Post discount</label>
+                <br>
             </div>
             <div style="margin: auto; margin-top: 5%;  text-align: center">
                 <br>

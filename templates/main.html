@@ -1,17 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="container">
-        <div class="row" >
-            <div class="col-10 offset-1" style="margin:auto;text-align: center">
-                <h3>Welcome to perfectly blank main page!</h3>
-            </div>
-        </div> 
+        
         {% if not user.is_authenticated %}
             <div class="col-10 offset-1" style="margin:auto;margin-top: 3%;text-align: center">
                 <a href="{% url 'login' %}" class="btn btn-outline-dark">Sign in</a>
             </div>
         {% endif %}
-
+        
+    
         {% if user.is_superuser %}
             <div class="col-4 offset-4" style="text-align: center; margin-top:2%">
                 <a class="btn btn-outline-dark" style=""
@@ -28,6 +25,15 @@
         <h4 style="width: 70%;margin: auto; text-align: center;margin-top:5%">Welcome, partner!</h4>
         <h5 style="width: 70%;margin: auto; text-align: center;margin-top:2%">Scan the qr-code, please, 
             to manage the ticket's vouchers</h5>
+    {% else %}
+        <br>
+        <div class="row" >
+            <div class="col-10 offset-1" style="margin:auto;text-align: center">
+                <h3>🌟 Welcome to the International Women's Day Celebration in Puerto Galera! 🎉✨</h3>
+                <br>
+                <h5>This event isn't just for women. We welcome individuals of all genders and view this as a family event – yes, there will be activities for kids, too!</h5>
+            </div>
+        </div> 
         
     {% endif %}
         

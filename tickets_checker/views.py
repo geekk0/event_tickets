@@ -188,7 +188,10 @@ def update_ticket_vouchers(request, ticket_code):
                 voucher.save()
             elif prefix == 'package':
                 ticket.package = Package.objects.get(id=request.POST[prefix])
+            elif prefix == 'post_discount':
+                ticket.post_discount = True
             elif 'csrf' not in prefix:
+                ticket.post_discount = False
                 setattr(ticket, prefix, request.POST[prefix])
 
         ticket.save()
