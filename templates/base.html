@@ -24,19 +24,21 @@
         .custom-bg-color {
             <!--background-color: #db4fc5;-->
         }
-        
-        <!--.custom-bg-primary textarea {
-            background-color: #9aa6b0; /* Change to the desired background color */
-            color: #fff; /* Change to the desired text color */
-        }-->
 
+        {% block background_image %}
+            body {
+                background-image: url('{% static "images/background.png" %}');
+                background-size: auto auto;
+                background-repeat: no-repeat;
+            }
+        {% endblock %}
     
         {% block style %}
         {% endblock %}
     </style>
 </head>
 
-<body style="width:95%; margin: auto">
+<body> {#style="width:95%; margin: auto"#}
 
         <header class="" style="width:100%">
 
@@ -62,13 +64,15 @@
                 <div class="col-8 offset-2">
                     <div class="">
                         <div class="col-8 offset-2">
-                            <h1 style="text-align: center;color: #db4fc5;" class="">She Sails!</h1>
+{#                            <img style="width:5%; margin:auto;" src='{% static "images/logo.png" %}' alt="Description of the image">#}
+                            <h1 style="text-align: center;color: #bc06a5;" class="">She Sails!</h1>
                         </div>
 
                     </div>
                 </div>
             {% else %}
-                <h3 href="/" class="nav-link display-5" style="text-align: center;color: #db4fc5;">She Sails!</h3>
+                 <h3 class="nav-link display-5" style="text-align: center;color: #bc06a5;">She Sails!</h3>
+{#                <img src='{% static "images/logo.png" %}' alt="Description of the image">#}
             {% endif %}
         </header>
         

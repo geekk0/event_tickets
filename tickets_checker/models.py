@@ -13,6 +13,7 @@ from .tg_bot import TelegramBot
 class Partner(models.Model):
     name = models.CharField(verbose_name="Partner name", max_length=100)
     image = models.ImageField(upload_to='partner_images', null=True, blank=True)
+    url = models.URLField(verbose_name="Partner's URL", null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name="User")
     facilitator = models.BooleanField(verbose_name="Is facilitator", default=False)
 

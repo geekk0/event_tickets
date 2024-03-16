@@ -1,202 +1,210 @@
 {%  extends 'base.html' %}
+{% load static %}
+
+{#{% block background_image %}#}
+{#    body {#}
+{#        background-image: url('{% static "images/greetings.png" %}');#}
+{#        background-size: 100% auto;#}
+{#        background-repeat: no-repeat;#}
+{#    }#}
+{#{% endblock %}#}
 
 {% block content %}
-    {% if error %}
-        <h3 style="color: #e02929; text-align: center; margin-top:2%">{{ error }}</h3>
-    {% else %}
-        <form method="post" action="{% url 'update_ticket_vouchers' ticket_info.code %}">  
-            {% csrf_token %}
-            <div style="margin: auto; margin-top: 2%; text-align: center">
+    <div style="height: 100%;
+        {#background-image: url('{% static "images/greetings.png" %}');#}
+        {#background-size: 100% auto;#}
+        {#background-repeat: no-repeat;#}
+            ">
+        {% if error %}
+            <h3 style="color: #e02929; text-align: center; margin-top:2%">{{ error }}</h3>
+        {% else %}
+            <form method="post" action="{% url 'update_ticket_vouchers' ticket_info.code %}">  
+                {% csrf_token %}
                 {% if not user.is_authenticated %}
-                    <a class="btn btn-outline-dark" href="{% url 'login' %}?next={{ request.path }}">For partners</a>
-                    <br>
-                {% endif %}
-                <br>
-                {% if user.is_staff %}
-                    <label for="holder">Ticket holder:</label>
-                    <input type="text" name="holder" id="holder" value="{{ ticket_info.holder }}">
-                    <br>
-                {% else %}    
-                    <p><span style="font-size: 14pt">Ticket holder: </span>{{ ticket_info.holder }}</p>
-                {% endif %}
-                <br>
-                <p>Ticket number: {{ ticket_info.number }}</p>
-                <p>Ticket code: {{ ticket_info.code }}</p>
-                <br>
-                {% if user.is_staff %}
-                    <div class=" col-6 offset-3">
-                        <p>Package:</p>
-                        <select class="form-select" style="" name="package">
-                            {% for package in packages %}
-                                <option value={{ package.id }} {% if package == ticket_info.package %}selected{% endif %}>{{ package.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <br>
-                        <p>Payment status:</p>
-                        <select class="form-select" style="" name="payment_status">
-                            <option value="Not paid" {% if ticket_info.payment_status == "Not paid" %}selected{% endif %}>Not paid</option>
-                            <option value="Paid" {% if ticket_info.payment_status == "Paid" %}selected{% endif %}>Paid</option>
-                        </select>
-                        <br>
-                        <p>Payment method:</p>
-                        <select class="form-select" style="" name="payment_method">
-                            <option value="Cash" {% if ticket_info.payment_method == "Cash" %}selected{% endif %}>Cash</option>
-                            <option value="GCash" {% if ticket_info.payment_method == "GCash" %}selected{% endif %}>GCash</option>
-                        </select>
+                    <div class="col-10 offset-1" style="text-align: center">
+                        <a class="btn btn-outline-dark" href="{% url 'login' %}?next={{ request.path }}">For partners</a>
                     </div>
-                {% else %}    
-                    <p>Package: {{ ticket_info.package }}</p>
-                    <p>Payment status: {{ ticket_info.payment_status }}</p>
-                    <p>Payment method: {{ ticket_info.payment_method }}</p>
-                {% endif %}    
-                <br>
-                <p>price:  {{ ticket_info.package.price }}</p>
-                {% if user.is_staff %}
-                    <input type="checkbox" name="post_discount" id="post_discount" 
-                           {% if ticket_info.post_discount == True %} checked {% endif %}>
-                    <label for="post_discount">Post discount</label>
-                {% endif %}    
-                <br>
-            </div>
-            <div style="margin: auto; margin-top: 5%;  text-align: center">
-                <br>
-                <h4>Activities:</h4>
-                <ul style="list-style: none;" class="col-12 col-md-8 offset-md-2">
-                        {% for activity in activities %}
-                            {% if user == activity.partner.user or user.is_superuser %}
-                                <br>
-                                <li>
-                                    <div class="row col-12">
-                                        <div class="col-12 col-md-4">&nbsp; {{ activity.partner }} &nbsp;</div>
-                                    </div>
-
-
-                                    <div class="row col-12  col-md-10 offset-md-1" style="margin-top:2%">
-
-                                        <!--<div class="col-5 col-md-4" >
+                {% endif %}
+                <div style="margin: auto; margin-left:4%; line-height: 0.9">
+                    
+                    <br>
+                    <br>
+                    {% if user.is_staff %}
+                        <label for="holder">Ticket holder:</label>
+                        <input type="text" name="holder" id="holder" value="{{ ticket_info.holder }}">
+                    {% else %}    
+                        <p style="font-size: 14pt"><span>Ticket holder: </span><b>{{ ticket_info.holder }}</b></p>
+                    {% endif %}
+                    <p>Ticket number: {{ ticket_info.number }}</p>
+                    <p>Ticket code: {{ ticket_info.code }}</p>
+                    {% if user.is_staff %}
+                        <div class=" col-6 offset-3">
+                            <p>Package:</p>
+                            <select class="form-select" style="" name="package">
+                                {% for package in packages %}
+                                    <option value={{ package.id }} {% if package == ticket_info.package %}selected{% endif %}>{{ package.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <br>
+                            <p>Payment status:</p>
+                            <select class="form-select" style="" name="payment_status">
+                                <option value="Not paid" {% if ticket_info.payment_status == "Not paid" %}selected{% endif %}>Not paid</option>
+                                <option value="Paid" {% if ticket_info.payment_status == "Paid" %}selected{% endif %}>Paid</option>
+                            </select>
+                            <br>
+                            <p>Payment method:</p>
+                            <select class="form-select" style="" name="payment_method">
+                                <option value="Cash" {% if ticket_info.payment_method == "Cash" %}selected{% endif %}>Cash</option>
+                                <option value="GCash" {% if ticket_info.payment_method == "GCash" %}selected{% endif %}>GCash</option>
+                            </select>
+                        </div>
+                    {% else %}    
+                        <p>Package: <b>{{ ticket_info.package }}</b></p>
+                        <p>Payment status: {{ ticket_info.payment_status }}</p>
+                        <p>Payment method: {{ ticket_info.payment_method }}</p>
+                    {% endif %}    
+                    <p>Price:  {{ ticket_info.package.price }}</p>
+                    {% if user.is_staff %}
+                        <input type="checkbox" name="post_discount" id="post_discount" 
+                               {% if ticket_info.post_discount == True %} checked {% endif %}>
+                        <label for="post_discount">Post discount</label>
+                    {% endif %}    
+                </div>
+                
+                {% if not user.is_authenticated %}
+                    <div>
+                        <img style="width:100%" src='{% static "images/greetings.png" %}' alt="">
+                    </div>
+                {% endif %}
+                
+                <div style="margin: auto; margin-top: 5%;  text-align: center">
+                    <br>
+                    <h4>Activities:</h4>
+                    <div>
+                        <ul style="list-style: none;" class="">
+                            {% for activity in activities %}
+                                {% if user == activity.partner.user or user.is_superuser %}
+                                    <br>
+                                    <li>
+                                        <div class="row col-12">
+                                            <div class="col-12 col-md-4">&nbsp; {{ activity.partner }} &nbsp;</div>
+                                        </div>
+    
+    
+                                        <div class="row col-12  col-md-10 offset-md-1" style="margin-top:2%">
+    
+                                            <!--<div class="col-5 col-md-4" >
+                                                {% if activity.partner.image %}
+                                                        <img src="{{ activity.partner.image.url }}" 
+                                                             alt="{{ activity.partner.name }} 
+                                                             Image"
+                                                            style="width: 100%">
+                                                {% endif %}
+                                            </div>-->
+    
+    
+    
+                                            <div class="col-8 col-md-4 offset-2">
+                                                <select class="form-select" style="" name="voucher_status_{{ activity.id }}">
+                                                    <option value="active" {% if activity.status == 'active' %}selected{% endif %}>Active</option>
+                                                    <option value="used" {% if activity.status == 'used' %}selected{% endif %}>Used</option>
+                                                    <!--<option value="expired" {% if activity.status == 'expired' %}selected{% endif %}>Expired</option>-->
+                                                </select>
+                                        </div>
+                                    </li>
+                                {% else %}
+                                    <br>
+                                    <li>
+    
+                                        <div class="row col-12">
+                                            <div class="col-12 col-md-4">&nbsp; {{ activity.partner }} &nbsp;</div>
+                                        </div>
+    
+                                        <div class="row col-12  col-md-10 offset-md-1" style="margin-top: 2%">
                                             {% if activity.partner.image %}
+                                                <div class="col-6 col-md-4">
                                                     <img src="{{ activity.partner.image.url }}" 
                                                          alt="{{ activity.partner.name }} 
                                                          Image"
-                                                        style="width: 100%">
+                                                         style="width: 100%">
+                                                </div>
                                             {% endif %}
-                                        </div>-->
-
-
-
-                                        <div class="col-8 col-md-4 offset-2">
-                                            <select class="form-select" style="" name="voucher_status_{{ activity.id }}">
-                                                <option value="active" {% if activity.status == 'active' %}selected{% endif %}>Active</option>
-                                                <option value="used" {% if activity.status == 'used' %}selected{% endif %}>Used</option>
-                                                <!--<option value="expired" {% if activity.status == 'expired' %}selected{% endif %}>Expired</option>-->
-                                            </select>
-                                    </div>
-                                </li>
-                            {% else %}
-                                <br>
-                                <li>
-
-                                    <div class="row col-12">
-                                        <div class="col-12 col-md-4">&nbsp; {{ activity.partner }} &nbsp;</div>
-                                    </div>
-
-                                    <div class="row col-12  col-md-10 offset-md-1" style="margin-top: 2%">
-                                        {% if activity.partner.image %}
-                                            <div class="col-6 col-md-4">
-                                                <img src="{{ activity.partner.image.url }}" 
-                                                     alt="{{ activity.partner.name }} 
-                                                     Image"
-                                                     style="width: 100%">
-                                            </div>
-                                        {% endif %}
-
-                                        <span {% if activity.partner.image %} class="col-6 col-md-4" 
-                                            {% else %} class="col-6 col-md-4 offset-6" {% endif %} style="color:
-                                            {% if activity.status == 'active' %}
-                                                green
-                                            {% elif activity.status == 'used' %}
-                                                rgba(114,53,227,0.89)
-                                            {% elif activity.status == 'expired' %}
-                                                red
-                                            {% endif %};">
-                                            {{ activity.status|title }}
-                                        </span>
-                                    </div>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                      </ul>
-                    
-                <h4>Vouchers:</h4>
-                        <br>
-                        <ul style="list-style: none;" class="col-12 col-md-8 offset-md-2">
-                        {% for voucher in vouchers %}
-                            {% if user == voucher.partner.user or user.is_superuser %}
-                                <li>
-
-                                    <div class="row col-12">
-                                        <div class="col-12 col-md-4">&nbsp; {{ voucher.partner }} &nbsp;</div>
-                                    </div>
-
-                                    <div class="row col-12  col-md-10 offset-md-1" 
-                                         style="margin-top:2%">
-                                        <div class="col-5 col-md-4 voucher_image" >
-                                            {% if voucher.partner.image %}
-                                                    <img src="{{ voucher.partner.image.url }}" 
-                                                         alt="{{ voucher.partner.name }} Image"
-                                                        style="width: 100%">
-                                            {% endif %}
+    
+                                            <span {% if activity.partner.image %} class="col-6 col-md-4" 
+                                                {% else %} class="col-6 col-md-4 offset-6" {% endif %} style="color:
+                                                {% if activity.status == 'active' %}
+                                                    green
+                                                {% elif activity.status == 'used' %}
+                                                    rgba(114,53,227,0.89)
+                                                {% elif activity.status == 'expired' %}
+                                                    red
+                                                {% endif %};">
+                                                {{ activity.status|title }}
+                                            </span>
                                         </div>
-
-                                        <div {% if voucher.partner.image %} class="col-6 col-md-4" 
-                                            {% else %} class="col-6 col-md-4 offset-6" {% endif %}>
-                                            <select class="form-select" style="" name="voucher_status_{{ voucher.id }}">
-                                                <option value="active" {% if voucher.status == 'active' %}selected{% endif %}>Active</option>
-                                                <option value="used" {% if voucher.status == 'used' %}selected{% endif %}>Used</option>
-                                                <!--<option value="expired" {% if voucher.status == 'expired' %}selected{% endif %}>Expired</option>-->
-                                            </select>
-                                    </div>
-                                </li>
-                            {% else %}
-                                <li>
-                                    {% if voucher.status == 'active' %}
-
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                          </ul>
+                    </div>    
+                    <h4>Vouchers:</h4>
+                    <br>
+                    <div class="col-10 offset-1">
+                        <ul style="list-style: none;padding-left: 0;" class="">
+                            {% for voucher in vouchers %}
+                                {% if user == voucher.partner.user or user.is_superuser %}
+                                    <li>
+    
                                         <div class="row col-12">
                                             <div class="col-12 col-md-4">&nbsp; {{ voucher.partner }} &nbsp;</div>
                                         </div>
-
-                                        <div class="row col-12  col-md-10 offset-md-1" style="margin-top: 2%">
-                                        {% if voucher.partner.image %}
-                                            <div class="col-6 col-md-4">
-                                                <img src="{{ voucher.partner.image.url }}" 
-                                                     alt="{{ voucher.partner.name }} 
-                                                     Image"
-                                                        style="width: 100%">
+    
+                                        <div class="row col-12  col-md-10 offset-md-1" 
+                                             style="margin-top:2%">
+                                            <div class="col-5 col-md-4 voucher_image" >
+                                                {% if voucher.partner.image %}
+                                                        <img src="{{ voucher.partner.image.url }}" 
+                                                             alt="{{ voucher.partner.name }} Image"
+                                                            style="width: 100%">
+                                                {% endif %}
                                             </div>
+    
+                                            <div {% if voucher.partner.image %} class="col-6 col-md-4" 
+                                                {% else %} class="col-6 col-md-4 offset-6" {% endif %}>
+                                                <select class="form-select" style="" name="voucher_status_{{ voucher.id }}">
+                                                    <option value="active" {% if voucher.status == 'active' %}selected{% endif %}>Active</option>
+                                                    <option value="used" {% if voucher.status == 'used' %}selected{% endif %}>Used</option>
+                                                    <!--<option value="expired" {% if voucher.status == 'expired' %}selected{% endif %}>Expired</option>-->
+                                                </select>
+                                        </div>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        {% if voucher.status == 'active' %}
+                                            {% if voucher.partner.image %}
+                                                <div>
+                                                    <img src="{{ voucher.partner.image.url }}" 
+                                                             alt="{{ voucher.partner.name }} 
+                                                             Image"
+                                                                style="width: 100%">
+                                                </div>
+                                            {% else %}
+                                                <div>
+                                                    <p>{{ voucher.partner.name }}</p>
+                                                </div>
+                                            {% endif %}    
                                         {% endif %}
-
-
-                                        <span {% if voucher.partner.image %} class="col-6 col-md-4" 
-                                            {% else %} class="col-6 col-md-4 offset-6" {% endif %} style="color:
-                                            {% if voucher.status == 'active' %}
-                                                green
-                                            {% elif voucher.status == 'used' %}
-                                                rgba(114,53,227,0.89)
-                                            {% elif voucher.status == 'expired' %}
-                                                red
-                                            {% endif %};">
-                                            {{ voucher.status|title }}
-                                        </span>
-                                    </div>
-                                    {% endif %}
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                      </ul>
-                
-                {% if user.is_authenticated %}  
-                    <button type="submit" class="btn btn-outline-dark" style="margin-top: 2%">Update Vouchers</button>
-                {% endif %}
-        </form>
-    {% endif %}
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                          </ul>
+                    </div>
+                    
+                    {% if user.is_authenticated %}  
+                        <button type="submit" class="btn btn-outline-dark" style="margin-top: 2%">Update Vouchers</button>
+                    {% endif %}
+                </div>
+            </form>
+        {% endif %}
+    </div>
 {% endblock %}
